@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Открытка для мамы 💌</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: radial-gradient(circle at 20% 20%, #fff0f6 0%, #ffd9e8 35%, #ffe9f2 60%, #e8f4ff 100%);
+      padding: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Мягкое свечение на фоне */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 80% 15%, rgba(255, 150, 200, 0.25), transparent 45%),
+        radial-gradient(circle at 10% 85%, rgba(180, 210, 255, 0.25), transparent 45%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== Летающие фото на фоне ===== */
+    .bg-photo {
+      position: fixed;
+      /* Убрали жесткие размеры и object-fit, чтобы не обрезало */
+      max-width: 170px;
+      height: auto;
+      border-radius: 16px;
+      border: 6px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 15px 35px rgba(180, 80, 130, 0.25);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0;
+      animation: 
+        floatPhoto linear infinite, 
+        pulseOpacity 4s ease-in-out infinite alternate,
+        fadeInPhoto 1.5s ease-out forwards; /* Плавное появление */
+      will-change: transform, opacity;
+    }
+
+    @keyframes fadeInPhoto {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 0.85; transform: scale(1); }
+    }
+
+    @keyframes floatPhoto {
+      0% { transform: translate(0, 0) rotate(var(--rot-start, -8deg)) scale(1); }
+      25% { transform: translate(30px, -40px) rotate(calc(var(--rot-start, -8deg) * -0.5)) scale(1.04); }
+      50% { transform: translate(-20px, -80px) rotate(var(--rot-start, -8deg)) scale(1); }
+      75% { transform: translate(-40px, -30px) rotate(calc(var(--rot-start, -8deg) * 0.5)) scale(0.97); }
+      100% { transform: translate(0, 0) rotate(var(--rot-start, -8deg)) scale(1); }
+    }
+
+    @keyframes pulseOpacity {
+      0% { opacity: 0.7; filter: drop-shadow(0 0 5px rgba(255,255,255,0.5)); }
+      100% { opacity: 1; filter: drop-shadow(0 0 15px rgba(255,255,255,0.9)); }
+    }
+
+    /* Мерцающие звёздочки */
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1;
+      color: #ffb3d1;
+      font-size: 18px;
+      animation: twinkle 2.5s ease-in-out infinite;
+      text-shadow: 0 0 10px rgba(255, 150, 200, 0.8);
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.1; transform: scale(0.6) rotate(0deg); }
+      50% { opacity: 0.9; transform: scale(1.2) rotate(180deg); }
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(10px);
+      border-radius: 30px;
+      padding: 40px 32px 44px;
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+      box-shadow:
+        0 24px 60px rgba(200, 80, 140, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+      position: relative;
+      z-index: 2;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 10px;
+      border: 1.5px dashed rgba(214, 51, 108, 0.25);
+      border-radius: 22px;
+      pointer-events: none;
+    }
+
+    .heart {
+      font-size: 46px;
+      line-height: 1;
+      animation: beat 1.4s ease-in-out infinite;
+      display: inline-block;
+      filter: drop-shadow(0 4px 10px rgba(214, 51, 108, 0.35));
+    }
+
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      20% { transform: scale(1.18); }
+      40% { transform: scale(0.94); }
+      60% { transform: scale(1.1); }
+      80% { transform: scale(0.98); }
+    }
+
+    h1 {
+      font-size: 38px;
+      color: #c2185b;
+      margin: 14px 0 8px;
+      letter-spacing: 2px;
+      font-weight: 700;
+      text-shadow: 0 2px 8px rgba(214, 51, 108, 0.15);
+    }
+
+    .hint {
+      color: #9c8a94;
+      font-size: 15px;
+      margin-bottom: 26px;
+      font-style: italic;
+    }
+
+    /* Кнопка со свечением */
+    button {
+      background: linear-gradient(135deg, #ff6fa8 0%, #e91e63 50%, #c2185b 100%);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 16px 38px;
+      font-size: 17px;
+      font-weight: 600;
+      font-family: inherit;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow:
+        0 10px 24px rgba(214, 51, 108, 0.45),
+        0 0 0 4px rgba(255, 255, 255, 0.5) inset;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow:
+        0 16px 30px rgba(214, 51, 108, 0.6),
+        0 0 20px rgba(255, 111, 168, 0.7),
+        0 0 0 4px rgba(255, 255, 255, 0.5) inset;
+    }
+
+    button:active {
+      transform: translateY(1px) scale(0.97);
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #message {
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Главное фото в открытке */
+    .photo-frame {
+      display: inline-block;
+      margin: 28px 0 20px;
+      padding: 8px 8px 30px;
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+      transform: rotate(-2deg);
+      animation: photoSway 6s ease-in-out infinite;
+      transition: transform 0.3s ease;
+    }
+
+    .photo-frame:hover {
+      transform: rotate(0deg) scale(1.03);
+    }
+
+    @keyframes photoSway {
+      0%, 100% { transform: rotate(-2deg) translateY(0); }
+      50% { transform: rotate(1.5deg) translateY(-6px); }
+    }
+
+    #photo {
+      width: 100%;
+      max-height: 320px;
+      object-fit: cover;
+      border-radius: 3px;
+      display: block;
+    }
+
+    .text {
+      font-size: 17px;
+      line-height: 1.75;
+      color: #4a3f4a;
+    }
+
+    .text .accent {
+      color: #c2185b;
+      font-weight: 600;
+    }
+
+    .signature {
+      margin-top: 22px;
+      font-size: 17px;
+      font-style: italic;
+      color: #c2185b;
+      font-weight: 600;
+    }
+
+    /* ===== Летящие сердечки ===== */
+    .floating-heart {
+      position: fixed;
+      bottom: -40px;
+      font-size: 24px;
+      pointer-events: none;
+      z-index: 9999;
+      animation: floatUp linear forwards;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg) scale(0.6); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 0.9; }
+      100% { transform: translateY(-110vh) rotate(360deg) scale(1.2); opacity: 0; }
+    }
+
+    /* ===== Звёздочки из кнопки ===== */
+    .spark {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      font-size: 20px;
+      animation: sparkFly 1s ease-out forwards;
+    }
+
+    @keyframes sparkFly {
+      0% { transform: translate(0, 0) scale(1); opacity: 1; }
+      100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+    }
+
+    @media (max-width: 420px) {
+      .card { padding: 30px 20px 34px; }
+      h1 { font-size: 30px; }
+      #photo { max-height: 240px; }
+      .text { font-size: 16px; }
+      .bg-photo { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="heart">💗</div>
+
+    <h1>Любимой маме</h1>
+    <p class="hint">Нажми на кнопочку — и случится чудо ✨</p>
+
+    <button id="openButton" onclick="openCard(event)">Открыть открытку</button>
+
+    <div id="message" class="hidden">
+      <div class="photo-frame">
+        <img id="photo" src="1.jpg" alt="Наше фото" onerror="this.parentNode.style.display='none'">
+      </div>
+
+      <p class="text">
+        <span class="accent">Мамочка, с праздником! 🌷</span><br><br>
+        Ты — мой самый тёплый дом и самый близкий человек на свете.
+        Спасибо за твои объятия, за терпение, за доброту, которая согревает
+        даже в самые пасмурные дни.<br><br>
+        Пусть каждый твой день будет наполнен <span class="accent">улыбками,
+        спокойствием и любовью</span>. Будь здорова и счастлива — ведь твоё
+        счастье делает счастливым и меня. 💐
+      </p>
+      <p class="signature">— Твой ребёнок, с любовью 💕</p>
+    </div>
+  </div>
+
+  <script>
+    var heartsStarted = false;
+
+    /* ===== Фоновые летающие фото ===== */
+    function createBgPhotos() {
+      var configs = [
+        { src: '2.jpg', top: '8%',  left: '5%',  size: 150, duration: 14, rot: -10, delay: 0 },
+        { src: '3.jpg', top: '55%', left: '78%', size: 160, duration: 17, rot: 8,  delay: -4 },
+        { src: '4.jpg', top: '70%', left: '8%',  size: 140, duration: 15, rot: -6, delay: -7 }
+      ];
+
+      configs.forEach(function (c) {
+        var img = document.createElement('img');
+        img.src = c.src;
+        img.className = 'bg-photo';
+        img.alt = '';
+        img.style.top = c.top;
+        img.style.left = c.left;
+        img.style.maxWidth = c.size + 'px'; // Изменили с width на maxWidth
+        img.style.animationDuration = c.duration + 's, 4s, 1.5s'; // Для floatPhoto, pulseOpacity, fadeInPhoto
+        img.style.animationDelay = c.delay + 's, 0s, 0.5s';
+        img.style.setProperty('--rot-start', c.rot + 'deg');
+        img.onerror = function () { this.remove(); };
+        document.body.appendChild(img);
+      });
+    }
+
+    /* ===== Мерцающие звёздочки ===== */
+    function createSparkles(count) {
+      var symbols = ['✦', '✧', '✨', '·', '⋆'];
+      for (var i = 0; i < count; i++) {
+        var s = document.createElement('div');
+        s.className = 'sparkle';
+        s.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        s.style.left = Math.random() * 100 + 'vw';
+        s.style.top = Math.random() * 100 + 'vh';
+        s.style.fontSize = (12 + Math.random() * 16) + 'px';
+        s.style.animationDelay = (Math.random() * 3) + 's';
+        s.style.animationDuration = (2 + Math.random() * 2) + 's';
+        document.body.appendChild(s);
+      }
+    }
+
+    /* ===== Открытие открытки ===== */
+    function openCard(event) {
+      var message = document.getElementById('message');
+      var button = document.getElementById('openButton');
+
+      if (event) {
+        createSparks(event.clientX, event.clientY);
+      }
+
+      message.classList.remove('hidden');
+      button.textContent = 'Открытка открыта 💕';
+      button.disabled = true;
+
+      message.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      if (!heartsStarted) {
+        heartsStarted = true;
+        startHearts(45);
+      }
+    }
+
+    /* ===== Искры из кнопки ===== */
+    function createSparks(x, y) {
+      for (var i = 0; i < 12; i++) {
+        var spark = document.createElement('div');
+        spark.className = 'spark';
+        spark.textContent = ['✨', '⭐', '💖'][Math.floor(Math.random() * 3)];
+        
+        var angle = Math.random() * Math.PI * 2;
+        var distance = 50 + Math.random() * 100;
+        var dx = Math.cos(angle) * distance;
+        var dy = Math.sin(angle) * distance;
+
+        spark.style.left = x + 'px';
+        spark.style.top = y + 'px';
+        spark.style.setProperty('--dx', dx + 'px');
+        spark.style.setProperty('--dy', dy + 'px');
+
+        document.body.appendChild(spark);
+
+        spark.addEventListener('animationend', function() {
+          this.remove();
+        });
+      }
+    }
+
+    /* ===== Дождь из сердечек ===== */
+    function startHearts(count) {
+      var emojis = ['❤️', '💖', '💗', '💕', '🌸', '💝', '🌷'];
+
+      for (var i = 0; i < count; i++) {
+        (function (index) {
+          setTimeout(function () {
+            createHeart(emojis);
+          }, index * 160);
+        })(i);
+      }
+
+      setInterval(function () {
+        if (Math.random() > 0.5) createHeart(emojis);
+      }, 800);
+    }
+
+    function createHeart(emojis) {
+      var heart = document.createElement('div');
+      heart.className = 'floating-heart';
+      heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      heart.style.left = (Math.random() * 100) + 'vw';
+      heart.style.fontSize = (18 + Math.random() * 22) + 'px';
+      heart.style.animationDuration = (5 + Math.random() * 5) + 's';
+      heart.style.animationDelay = (Math.random() * 0.8) + 's';
+      document.body.appendChild(heart);
+
+      heart.addEventListener('animationend', function () {
+        heart.remove();
+      });
+    }
+
+    window.addEventListener('load', function () {
+      createBgPhotos();
+      createSparkles(22);
+    });
+  </script>
+</body>
+</html>
