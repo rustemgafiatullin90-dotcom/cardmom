@@ -1,1 +1,1 @@
-# cardmom
+download and setup
